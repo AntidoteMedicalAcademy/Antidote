@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Review From Our Students - Antidote Medical Academy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-sans">
+
+  <!-- Navbar -->
+  <nav class="bg-white shadow p-4 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+      <a href="index.html" class="text-2xl font-bold text-blue-800 hover:underline">
+        Antidote Medical Academy
+      </a>
+      <a href="signin.html" class="text-gray-700 hover:text-blue-600 font-medium">Sign In</a>
+    </div>
+  </nav>
+
+  <main class="max-w-5xl mx-auto px-6 py-12">
+    <h1 class="text-4xl font-bold mb-12 text-gray-800 leading-snug max-w-3xl">
+      Hear From Our Students
+    </h1>
+
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <!-- Review 1 -->
+      <div class="bg-white rounded-lg shadow overflow-hidden">
+        <img src="r1.jpg" alt="Student Review 1" class="w-full object-cover h-64" />
+      </div>
+
+      <!-- Review 2 -->
+      <div class="bg-white rounded-lg shadow overflow-hidden">
+        <img src="r2.jpg" alt="Student Review 2" class="w-full object-cover h-64" />
+      </div>
+
+      <!-- Review 3 -->
+      <div class="bg-white rounded-lg shadow overflow-hidden">
+        <img src="r3.jpg" alt="Student Review 3" class="w-full object-cover h-64" />
+      </div>
+
+      <!-- Review 4 -->
+      <div class="bg-white rounded-lg shadow overflow-hidden">
+        <img src="r4.jpg" alt="Student Review 4" class="w-full object-cover h-64" />
+
+<!-- Review 5 -->
+      <div class="bg-white rounded-lg shadow overflow-hidden">
+        <img src="r5.jpg" alt="Student Review 4" class="w-full object-cover h-64" />
+
+<!-- Review 6 -->
+      <div class="bg-white rounded-lg shadow overflow-hidden">
+        <img src="r6.jpg" alt="Student Review 4" class="w-full object-cover h-64" />
+
+      </div>
+    </section>
+  </main>
+
+</body>
+</html>
