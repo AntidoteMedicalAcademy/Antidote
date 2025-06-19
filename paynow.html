@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pay Now - Antidote Medical Academy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-sans">
+
+  <!-- Navbar -->
+  <nav class="bg-white shadow p-4 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+      <a href="index.html" class="text-2xl font-bold text-blue-800">Antidote Medical Academy</a>
+      <a href="cart.html" class="text-gray-700 hover:text-blue-600 font-medium">Cart</a>
+    </div>
+  </nav>
+
+  <main class="max-w-3xl mx-auto px-4 py-10">
+    <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Complete Your Payment</h1>
+
+    <div class="bg-white p-6 rounded shadow mb-6">
+      <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
+      <div id="order-summary" class="text-gray-700">
+        <!-- Cart items will be injected here -->
+      </div>
+      <div class="mt-4 text-right text-lg font-bold">
+        Total: <span id="total-amount">0</span> Taka
+      </div>
+    </div>
+
+    <div class="bg-white p-6 rounded shadow">
+      <h2 class="text-xl font-semibold mb-4">Choose Payment Method</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+        <!-- Bkash -->
+        <button onclick="payWithBkash()" class="bg-pink-600 text-white py-3 rounded hover:bg-pink-700 transition">
+          Pay with bKash
+        </button>
+
+        <!-- Nagad -->
+        <button onclick="payWithNagad()" class="bg-orange-600 text-white py-3 rounded hover:bg-orange-700 transition">
+          Pay with Nagad
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function renderOrderSummary() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const summaryDiv = document.getElementById('order-summary');
+      const totalAmountEl = document.getElementById('total-amount');
+      let total = 0;
+
+      if (cart.length === 0) {
+        summaryDiv.innerHTML = "<p>Your cart is empty.</p>";
+        totalAmountEl.textContent = "0";
+        return;
+      }
+
+      let html = "<ul>";
+      cart.forEach(item => {
+        html += `<li class="flex justify-between border-b py-2">
+          <span>${item.name}</span>
+          <span>${item.price} Taka</span>
+        </li>`;
+        total += item.price;
+      });
+      html += "</ul>";
+
+      summaryDiv.innerHTML = html;
+      totalAmountEl.textContent = total;
+    }
+
+    function payWithBkash() {
+      alert("Redirecting to bKash payment gateway...");
+      // Simulate API call → You'd typically call your backend here
+      setTimeout(() => {
+        alert("Payment successful via bKash!");
+        localStorage.removeItem("cart");
+        window.location.href = "thankyou.html";
+      }, 1000);
+    }
+
+    function payWithNagad() {
+      alert("Redirecting to Nagad payment gateway...");
+      // Simulate API call → You'd typically call your backend here
+      setTimeout(() => {
+        alert("Payment successful via Nagad!");
+        localStorage.removeItem("cart");
+        window.location.href = "thankyou.html";
+      }, 1000);
+    }
+
+    window.onload = renderOrderSummary;
+  </script>
+</body>
+</html>
