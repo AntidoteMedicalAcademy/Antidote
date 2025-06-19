@@ -4,14 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dashboard - Antidote Medical Academy</title>
-  <!-- Firebase App (the core Firebase SDK) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-
-<!-- Firebase Authentication SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-
-<!-- Firebase Firestore SDK (database) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <!-- Firebase App (compat version for easy setup) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <!-- Firebase Auth -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <!-- Firebase Firestore -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -21,10 +19,10 @@
   <nav class="bg-white shadow p-4 sticky top-0 z-50">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
       <a href="index.html" class="flex items-center space-x-3">
-        <img src="logo.png" alt="Logo" class="h-10 w-auto">
+        <img src="logo.png" alt="Logo" class="h-10 w-auto" />
         <span class="text-2xl font-bold text-blue-800">Antidote Medical Academy</span>
       </a>
-      <button onclick="signOut()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Sign Out</button>
+      <button id="signOutBtn" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Sign Out</button>
     </div>
   </nav>
 
@@ -34,16 +32,18 @@
     <p class="text-gray-600 mb-8">Here are your enrolled courses and actions:</p>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Placeholder for courses -->
+      <!-- Purchased courses -->
       <div class="bg-white rounded-lg shadow p-6">
-        <h2 class="text-xl font-semibold mb-2">Your Courses</h2>
-        <p class="text-gray-500">You haven't enrolled in any courses yet.</p>
+        <h2 class="text-xl font-semibold mb-4">Your Courses</h2>
+        <ul id="coursesList" class="list-disc list-inside text-gray-700 min-h-[100px]">
+          <li>Loading courses...</li>
+        </ul>
         <a href="first-phase.html" class="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Browse Courses</a>
       </div>
 
       <!-- Profile info -->
       <div class="bg-white rounded-lg shadow p-6">
-        <h2 class="text-xl font-semibold mb-2">Account Info</h2>
+        <h2 class="text-xl font-semibold mb-4">Account Info</h2>
         <p>Email: <span id="profile-email" class="font-medium text-gray-800"></span></p>
         <p>Status: <span class="text-green-600 font-semibold">Signed In</span></p>
       </div>
@@ -51,25 +51,69 @@
   </main>
 
   <script>
-    // Check sign-in status
-    const isSignedIn = localStorage.getItem("isSignedIn");
-    const email = localStorage.getItem("userEmail");
+    // Firebase config (your project)
+    const firebaseConfig = {
+      apiKey: "AIzaSyB5wSwO1J8wQq1EdJoaRhAUo4LwVjrqHgY",
+      authDomain: "antidote-5c36d.firebaseapp.com",
+      projectId: "antidote-5c36d",
+      storageBucket: "antidote-5c36d.appspot.com",
+      messagingSenderId: "643376487279",
+      appId: "1:643376487279:web:9ac6ab3bc4e0711b8da69a",
+      measurementId: "G-N9MEQYS35D"
+    };
 
-    if (!isSignedIn || !email) {
-      alert("You must sign in first.");
-      window.location.href = "signin.html";
-    } else {
-      document.getElementById("user-email").textContent = email;
-      document.getElementById("profile-email").textContent = email;
-    }
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
 
-    // Sign out
-    function signOut() {
-      localStorage.removeItem("isSignedIn");
-      localStorage.removeItem("userEmail");
-      localStorage.removeItem("cart");
-      window.location.href = "signin.html";
-    }
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    const userEmailSpan = document.getElementById('user-email');
+    const profileEmailSpan = document.getElementById('profile-email');
+    const coursesList = document.getElementById('coursesList');
+    const signOutBtn = document.getElementById('signOutBtn');
+
+    // Check auth state on load
+    auth.onAuthStateChanged(async (user) => {
+      if (!user) {
+        // No user signed in, redirect to sign in page
+        window.location.href = "signin.html";
+        return;
+      }
+
+      // Set user email display
+      userEmailSpan.textContent = user.email;
+      profileEmailSpan.textContent = user.email;
+
+      // Fetch purchased courses for user
+      try {
+        const purchasesRef = db.collection('purchases');
+        const snapshot = await purchasesRef.where('userEmail', '==', user.email).get();
+
+        coursesList.innerHTML = ''; // Clear loading text
+
+        if (snapshot.empty) {
+          coursesList.innerHTML = '<li>You have not enrolled in any courses yet.</li>';
+          return;
+        }
+
+        snapshot.forEach(doc => {
+          const course = doc.data();
+          const li = document.createElement('li');
+          li.textContent = course.courseName || 'Unnamed course';
+          coursesList.appendChild(li);
+        });
+      } catch (error) {
+        coursesList.innerHTML = `<li class="text-red-600">Failed to load courses: ${error.message}</li>`;
+      }
+    });
+
+    // Sign out handler
+    signOutBtn.addEventListener('click', () => {
+      auth.signOut().then(() => {
+        window.location.href = 'signin.html';
+      });
+    });
   </script>
 
 </body>
