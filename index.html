@@ -4,18 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Antidote Medical Academy</title>
-  <!-- Firebase App (the core Firebase SDK) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-
-<!-- Firebase Authentication SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-
-<!-- Firebase Firestore SDK (database) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <!-- Firebase SDKs (compat versions for easier integration) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Custom gradient background */
     body {
       background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
       font-family: 'Inter', sans-serif;
@@ -31,29 +26,33 @@
         <img src="logo.png" alt="Logo" class="h-20 w-20 object-contain" />
         Antidote Medical Academy
       </a>
-      <div class="flex items-center space-x-8 text-gray-700 font-semibold">
 
+      <div id="nav-links" class="flex items-center space-x-8 text-gray-700 font-semibold">
         <!-- Admission Dropdown -->
         <div class="relative group">
-          <button class="flex items-center gap-1 hover:text-blue-600 transition duration-300">
+          <button class="flex items-center gap-1 hover:text-blue-600 transition duration-300" aria-haspopup="true" aria-expanded="false" aria-controls="admission-menu">
             Admission
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
             </svg>
           </button>
-          <div class="absolute hidden group-hover:block bg-white shadow-lg rounded w-48 top-full left-0 z-50">
-            <a href="first-phase.html" class="block px-4 py-2 hover:bg-blue-100 text-gray-700 transition">First Phase</a>
-            <a href="#" class="block px-4 py-2 text-gray-400 cursor-not-allowed">Second Phase</a>
-            <a href="#" class="block px-4 py-2 text-gray-400 cursor-not-allowed">Third Phase</a>
-            <a href="#" class="block px-4 py-2 text-gray-400 cursor-not-allowed">Fourth Phase</a>
+          <div id="admission-menu" class="absolute hidden group-hover:block bg-white shadow-lg rounded w-48 top-full left-0 z-50" role="menu" aria-label="Admission submenu">
+            <a href="first-phase.html" class="block px-4 py-2 hover:bg-blue-100 text-gray-700 transition" role="menuitem">First Phase</a>
+            <a href="#" class="block px-4 py-2 text-gray-400 cursor-not-allowed" tabindex="-1" aria-disabled="true">Second Phase</a>
+            <a href="#" class="block px-4 py-2 text-gray-400 cursor-not-allowed" tabindex="-1" aria-disabled="true">Third Phase</a>
+            <a href="#" class="block px-4 py-2 text-gray-400 cursor-not-allowed" tabindex="-1" aria-disabled="true">Fourth Phase</a>
           </div>
         </div>
 
         <a href="#" class="hover:text-blue-600 transition duration-300">Publication</a>
         <a href="#" class="hover:text-blue-600 transition duration-300">About Us</a>
-        <a href="signin.html" class="bg-blue-600 text-white px-5 py-2 rounded-lg shadow hover:bg-blue-700 transition duration-300">
+
+        <a href="signin.html" id="sign-in-link" class="bg-blue-600 text-white px-5 py-2 rounded-lg shadow hover:bg-blue-700 transition duration-300">
           Sign In
         </a>
+        <button id="sign-out-btn" class="hidden bg-red-600 text-white px-5 py-2 rounded-lg shadow hover:bg-red-700 transition duration-300">
+          Sign Out
+        </button>
       </div>
     </div>
   </nav>
@@ -71,76 +70,109 @@
     </a>
   </section>
 
-<!-- Features Section -->
-<section class="bg-white bg-opacity-90 backdrop-blur-md max-w-7xl mx-auto px-6 py-16 rounded-lg shadow-lg mb-20">
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-gray-800 font-medium max-w-4xl mx-auto">
+  <!-- Features Section -->
+  <section class="bg-white bg-opacity-90 backdrop-blur-md max-w-7xl mx-auto px-6 py-16 rounded-lg shadow-lg mb-20">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-gray-800 font-medium max-w-4xl mx-auto">
 
-    <!-- Mentor -->
-    <div class="flex gap-4 items-start">
-      <div class="flex-shrink-0 flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-lg">
-        <!-- Person (Teacher) Icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" stroke="none">
-          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zM6 18c0-2.67 5.33-4 6-4s6 1.33 6 4v1H6v-1z"/>
-        </svg>
+      <!-- Expert Mentors -->
+      <div class="flex gap-4 items-start">
+        <div class="flex-shrink-0 flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-lg" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" stroke="none">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zM6 18c0-2.67 5.33-4 6-4s6 1.33 6 4v1H6v-1z"/>
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-blue-800 mb-1">Expert Mentors</h3>
+          <p>Learn from experienced medical personalities from top medical colleges dedicated to your success.</p>
+        </div>
       </div>
-      <div>
-        <h3 class="text-xl font-semibold text-blue-800 mb-1">Expert Mentors</h3>
-        <p>Learn from experienced medical personalities from top medical colleges dedicated to your success.</p>
+
+      <!-- Book Based Education -->
+      <div class="flex gap-4 items-start">
+        <div class="flex-shrink-0 flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-lg" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6a2 2 0 00-2 2v6a2 2 0 002 2h12a2 2 0 002-2v-6a2 2 0 00-2-2z" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-blue-800 mb-1">Main Book Based Education &amp; Best Visualization</h3>
+          <p>Our courses focus on core textbooks enhanced with top-quality visuals for deeper understanding.</p>
+        </div>
       </div>
+
+      <!-- Annotated PDF -->
+      <div class="flex gap-4 items-start">
+        <div class="flex-shrink-0 flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-lg" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-3m0 6v.01M16 20H8a2 2 0 01-2-2V6a2 2 0 012-2h4l4 4v10a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-blue-800 mb-1">Annotated PDF</h3>
+          <p>Get detailed, easy-to-follow annotated PDFs to aid your revision and learning process.</p>
+        </div>
+      </div>
+
+      <!-- 24/7 Mentor Support -->
+      <div class="flex gap-4 items-start">
+        <div class="flex-shrink-0 flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-lg" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13a7 7 0 0114 0v3a2 2 0 01-2 2h-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3H7a2 2 0 01-2-2v-3z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3a7 7 0 00-7 7v3a7 7 0 0014 0v-3a7 7 0 00-7-7z" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-blue-800 mb-1">24/7 Mentor Support</h3>
+          <p>Access round-the-clock mentor guidance to clarify doubts and stay motivated.</p>
+        </div>
+      </div>
+
     </div>
-
-    <!-- Book -->
-    <div class="flex gap-4 items-start">
-      <div class="flex-shrink-0 flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-lg">
-        <!-- Book Icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6a2 2 0 00-2 2v6a2 2 0 002 2h12a2 2 0 002-2v-6a2 2 0 00-2-2z" />
-        </svg>
-      </div>
-      <div>
-        <h3 class="text-xl font-semibold text-blue-800 mb-1">Main Book Based Education & Best Visualization</h3>
-        <p>Our courses focus on core textbooks enhanced with top-quality visuals for deeper understanding.</p>
-      </div>
-    </div>
-
-    <!-- Annotated PDF -->
-    <div class="flex gap-4 items-start">
-      <div class="flex-shrink-0 flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-lg">
-        <!-- Document Icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-3m0 6v.01M16 20H8a2 2 0 01-2-2V6a2 2 0 012-2h4l4 4v10a2 2 0 01-2 2z" />
-        </svg>
-      </div>
-      <div>
-        <h3 class="text-xl font-semibold text-blue-800 mb-1">Annotated PDF</h3>
-        <p>Get detailed, easy-to-follow annotated PDFs to aid your revision and learning process.</p>
-      </div>
-    </div>
-
-    <!-- Support -->
-    <div class="flex gap-4 items-start">
-      <div class="flex-shrink-0 flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-lg">
-        <!-- Person with Headset Icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13a7 7 0 0114 0v3a2 2 0 01-2 2h-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3H7a2 2 0 01-2-2v-3z" />
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3a7 7 0 00-7 7v3a7 7 0 0014 0v-3a7 7 0 00-7-7z" />
-        </svg>
-      </div>
-      <div>
-        <h3 class="text-xl font-semibold text-blue-800 mb-1">24/7 Mentor Support</h3>
-        <p>Access round-the-clock mentor guidance to clarify doubts and stay motivated.</p>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-
+  </section>
 
   <!-- Footer -->
   <footer class="bg-blue-900 text-white py-6 text-center">
     <p>&copy; 2025 Antidote Medical Academy. All rights reserved.</p>
   </footer>
 
+  <script>
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyB5wSwO1J8wQq1EdJoaRhAUo4LwVjrqHgY",
+      authDomain: "antidote-5c36d.firebaseapp.com",
+      projectId: "antidote-5c36d",
+      storageBucket: "antidote-5c36d.appspot.com",
+      messagingSenderId: "643376487279",
+      appId: "1:643376487279:web:9ac6ab3bc4e0711b8da69a",
+      measurementId: "G-N9MEQYS35D"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    const auth = firebase.auth();
+
+    // DOM Elements
+    const signInLink = document.getElementById('sign-in-link');
+    const signOutBtn = document.getElementById('sign-out-btn');
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        // User is signed in
+        signInLink.classList.add('hidden');
+        signOutBtn.classList.remove('hidden');
+      } else {
+        // No user signed in
+        signInLink.classList.remove('hidden');
+        signOutBtn.classList.add('hidden');
+      }
+    });
+
+    signOutBtn.addEventListener('click', () => {
+      auth.signOut().then(() => {
+        window.location.href = 'index.html'; // Reload homepage after sign-out
+      });
+    });
+  </script>
 </body>
 </html>
