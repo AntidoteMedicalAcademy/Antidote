@@ -1,1 +1,1 @@
-# Antidote
+Removed README.md content
