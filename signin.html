@@ -4,15 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Sign In - Antidote Medical Academy</title>
-  <!-- Firebase App (the core Firebase SDK) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-
-<!-- Firebase Authentication SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-
-<!-- Firebase Firestore SDK (database) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans flex items-center justify-center h-screen">
@@ -20,10 +11,10 @@
   <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
     <h1 class="text-2xl font-bold mb-6 text-center text-blue-800">Sign In</h1>
 
-    <form onsubmit="handleSignIn(event)" class="space-y-4">
+    <form id="signInForm" class="space-y-4">
       <div>
-        <label for="username" class="block text-gray-700 mb-1">Username</label>
-        <input id="username" type="text" required class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600" />
+        <label for="email" class="block text-gray-700 mb-1">Email</label>
+        <input id="email" type="email" required class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600" />
       </div>
 
       <div>
@@ -46,24 +37,51 @@
     </div>
   </div>
 
-  <script>
-    function handleSignIn(event) {
-      event.preventDefault();
+  <script type="module">
+    // Import Firebase SDK modules from CDN
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
+    // Your Firebase config object
+    const firebaseConfig = {
+      apiKey: "AIzaSyB5wSwO1J8wQq1EdJoaRhAUo4LwVjrqHgY",
+      authDomain: "antidote-5c36d.firebaseapp.com",
+      projectId: "antidote-5c36d",
+      storageBucket: "antidote-5c36d.appspot.com",
+      messagingSenderId: "643376487279",
+      appId: "1:643376487279:web:9ac6ab3bc4e0711b8da69a",
+      measurementId: "G-N9MEQYS35D"
+    };
 
-      if (username && password) {
-        // Store login state and user email
-        localStorage.setItem("isSignedIn", "true");
-        localStorage.setItem("userEmail", username);
+    // Initialize Firebase app and auth
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-        alert("Signed in successfully!");
-        window.location.href = "dashboard.html"; // Redirect to user dashboard
-      } else {
-        alert("Invalid credentials");
+    // Sign in form submission handler
+    const form = document.getElementById('signInForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        alert('Signed in successfully! Welcome, ' + user.email);
+
+        // Optionally store session info locally
+        localStorage.setItem('isSignedIn', 'true');
+        localStorage.setItem('userEmail', user.email);
+
+        // Redirect to dashboard page
+        window.location.href = 'dashboard.html';
+      } catch (error) {
+        alert('Error signing in: ' + error.message);
       }
-    }
+    });
   </script>
+
 </body>
 </html>
