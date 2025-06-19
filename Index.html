@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Antidote Medical Academy - Admission</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+  <header class="bg-white shadow p-4 text-center">
+    <h1 class="text-3xl font-bold text-blue-700">Antidote Medical Academy</h1>
+    <p class="text-gray-600">Your Gateway to Medical Excellence</p>
+  </header>
+
+  <main class="max-w-3xl mx-auto p-6 mt-6 bg-white rounded-xl shadow-lg">
+    <h2 class="text-2xl font-semibold mb-4">Online Admission Form</h2>
+
+    <form id="admissionForm" class="space-y-4">
+      <input required name="name" placeholder="Full Name" class="w-full border p-2 rounded" />
+      <input required name="college" placeholder="Medical College Name" class="w-full border p-2 rounded" />
+      <input required name="session" placeholder="Session (e.g. 2020-21)" class="w-full border p-2 rounded" />
+      <input required name="email" type="email" placeholder="Email" class="w-full border p-2 rounded" />
+      <input required name="phone" placeholder="Phone Number" class="w-full border p-2 rounded" />
+      <input required name="payment" placeholder="Bkash/Nagad TXN ID" class="w-full border p-2 rounded" />
+
+      <label class="block text-gray-700 font-medium">Select Course:</label>
+      <select required name="course" class="w-full border p-2 rounded">
+        <option value="">-- Choose Course --</option>
+        <option>FCPS Part 1</option>
+        <option>BCPS Guidelines</option>
+        <option>MED B Course</option>
+        <option>Anatomy Crash</option>
+        <option>Physiology Deep Dive</option>
+        <option>Biochemistry Express</option>
+        <option>Community Medicine Fast</option>
+        <option>Clinical Round Prep</option>
+      </select>
+
+      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Submit</button>
+    </form>
+
+    <div id="confirmation" class="hidden mt-6 p-4 bg-green-100 text-green-800 rounded">
+      <p><strong>Thank you!</strong> Your admission has been received.</p>
+      <p><strong>Registration ID:</strong> <span id="regID"></span></p>
+      <p><strong>Group Link:</strong> <span id="groupLink">[Will be sent soon]</span></p>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById("admissionForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const regID = "AMD-" + Date.now().toString().slice(-6); // simple unique ID
+
+      // Here you would send data to backend
+      // For now, just simulate success
+      document.getElementById("regID").textContent = regID;
+      document.getElementById("confirmation").classList.remove("hidden");
+      form.reset();
+    });
+  </script>
+
+</body>
+</html>
