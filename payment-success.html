@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Payment Success - Antidote Medical Academy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-sans p-8">
+
+  <h1 class="text-3xl font-bold mb-6">Payment Successful!</h1>
+
+  <div id="success-info" class="bg-white p-6 rounded shadow max-w-3xl mx-auto">
+    <!-- Payment details and group links will appear here -->
+  </div>
+
+  <script>
+    // Course -> Facebook group map
+    const groupLinks = {
+      "Antidote To First Card": "https://www.facebook.com/groups/1250823519659781/",
+      "Antidote To Second Card": "https://www.facebook.com/groups/1183623726302231",
+      "Antidote To Third Card": "https://www.facebook.com/groups/1707676703505533",
+      "Antidote To Fourth Card": "https://www.facebook.com/groups/910247624638920",
+      "Antidote To Fifth Card": "https://www.facebook.com/groups/1842802763176935",
+      "Antidote To Sixth Card": "https://www.facebook.com/groups/1184065259357862"
+    };
+
+    function generateOTP() {
+      return Math.floor(100000 + Math.random() * 900000).toString();
+    }
+
+    // Get cart from localStorage
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    if (cart.length === 0) {
+      document.getElementById('success-info').innerHTML = '<p>Your cart was empty or payment info missing.</p>';
+    } else {
+      let html = `<p class="mb-6">Thank you for your purchase! Below are your OTPs and group links for each course.</p>`;
+      html += '<ul class="space-y-6">';
+      
+      // Retrieve or create dashboard data
+      let dashboard = JSON.parse(localStorage.getItem('dashboard')) || [];
+
+      cart.forEach(item => {
+        const otp = generateOTP();
+        const groupLink = groupLinks[item.name] || "#";
+
+        html += `
+          <li class="border p-4 rounded shadow-sm">
+            <h2 class="font-semibold text-lg">${item.name}</h2>
+            <p><strong>Your OTP:</strong> <code>${otp}</code></p>
+            <p>Join your course group here: <a href="${groupLink}" target="_blank" class="text-blue-600 hover:underline">${groupLink}</a></p>
+          </li>
+        `;
+
+        // Save OTP & group link to dashboard storage
+        dashboard.push({
+          course: item.name,
+          otp,
+          groupLink,
+          purchasedAt: new Date().toISOString()
+        });
+      });
+
+      html += '</ul>';
+
+      document.getElementById('success-info').innerHTML = html;
+
+      // Save dashboard info persistently
+      localStorage.setItem('dashboard', JSON.stringify(dashboard));
+      // Clear the cart now that purchase is complete
+      localStorage.removeItem('cart');
+    }
+  </script>
+
+</body>
+</html>
