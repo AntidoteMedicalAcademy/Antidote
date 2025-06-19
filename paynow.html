@@ -40,26 +40,22 @@
   </main>
 
   <script>
-    // Display the total amount
+    // Display the total amount from localStorage (or 0)
     const total = localStorage.getItem("totalAmount") || 0;
     document.getElementById("amount").textContent = total;
 
-    // Mock payment function
+    // Simulated payment function
     function payWith(method) {
       if (parseFloat(total) === 0) {
         alert("No payment required. Your total is 0 Taka.");
         return;
       }
 
-      // Simulated confirmation
+      // Simulate payment success alert
       alert(`Redirecting to ${method} gateway... (mock)\nPayment of ${total} Taka successful.`);
-      
-      // Clear cart
-      localStorage.removeItem("cart");
-      localStorage.removeItem("totalAmount");
 
-      // Redirect to success or home
-      window.location.href = "index.html";
+      // Redirect to payment success page after payment
+      window.location.href = "payment-success.html";
     }
   </script>
 
