@@ -45,9 +45,12 @@
       const password = document.getElementById("password").value;
 
       if (username && password) {
+        // Store login state and user email
         localStorage.setItem("isSignedIn", "true");
+        localStorage.setItem("userEmail", username);
+
         alert("Signed in successfully!");
-        window.location.href = "first-phase.html";
+        window.location.href = "dashboard.html"; // Redirect to user dashboard
       } else {
         alert("Invalid credentials");
       }
