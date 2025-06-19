@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Antidote Medical Academy</title>
-  <!-- Firebase SDKs (compat versions for easier integration) -->
+  <!-- Firebase SDKs (compat versions) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -18,7 +18,6 @@
   </style>
 </head>
 <body>
-
   <!-- Navbar -->
   <nav class="bg-white bg-opacity-80 backdrop-blur-md shadow-md sticky top-0 z-50">
     <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
@@ -27,16 +26,35 @@
         Antidote Medical Academy
       </a>
 
-      <div id="nav-links" class="flex items-center space-x-8 text-gray-700 font-semibold">
+      <!-- Desktop Nav Links -->
+      <div id="nav-links" class="hidden md:flex items-center space-x-8 text-gray-700 font-semibold">
         <!-- Admission Dropdown -->
         <div class="relative group">
-          <button class="flex items-center gap-1 hover:text-blue-600 transition duration-300" aria-haspopup="true" aria-expanded="false" aria-controls="admission-menu">
+          <button
+            class="flex items-center gap-1 hover:text-blue-600 transition duration-300"
+            aria-haspopup="true"
+            aria-expanded="false"
+            aria-controls="admission-menu"
+          >
             Admission
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
             </svg>
           </button>
-          <div id="admission-menu" class="absolute hidden group-hover:block bg-white shadow-lg rounded w-48 top-full left-0 z-50" role="menu" aria-label="Admission submenu">
+          <div
+            id="admission-menu"
+            class="absolute hidden group-hover:block bg-white shadow-lg rounded w-48 top-full left-0 z-50"
+            role="menu"
+            aria-label="Admission submenu"
+          >
             <a href="first-phase.html" class="block px-4 py-2 hover:bg-blue-100 text-gray-700 transition" role="menuitem">First Phase</a>
             <a href="#" class="block px-4 py-2 text-gray-400 cursor-not-allowed" tabindex="-1" aria-disabled="true">Second Phase</a>
             <a href="#" class="block px-4 py-2 text-gray-400 cursor-not-allowed" tabindex="-1" aria-disabled="true">Third Phase</a>
@@ -54,6 +72,34 @@
           Sign Out
         </button>
       </div>
+
+      <!-- Mobile Hamburger Button -->
+      <button
+        id="mobile-menu-btn"
+        class="md:hidden flex items-center justify-center p-2 rounded-md text-blue-800 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-600"
+        aria-label="Toggle menu"
+      >
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white bg-opacity-90 backdrop-blur-md shadow-lg p-4 space-y-3">
+      <a href="first-phase.html" class="block px-4 py-2 rounded hover:bg-blue-100 text-blue-800 font-semibold">First Phase</a>
+      <a href="#" class="block px-4 py-2 rounded text-gray-400 cursor-not-allowed">Second Phase</a>
+      <a href="#" class="block px-4 py-2 rounded text-gray-400 cursor-not-allowed">Third Phase</a>
+      <a href="#" class="block px-4 py-2 rounded text-gray-400 cursor-not-allowed">Fourth Phase</a>
+      <a href="#" class="block px-4 py-2 rounded hover:bg-blue-100">Publication</a>
+      <a href="#" class="block px-4 py-2 rounded hover:bg-blue-100">About Us</a>
+
+      <a href="signin.html" id="mobile-sign-in-link" class="block px-4 py-2 rounded bg-blue-600 text-white text-center font-semibold hover:bg-blue-700">
+        Sign In
+      </a>
+      <button id="mobile-sign-out-btn" class="hidden w-full px-4 py-2 rounded bg-red-600 text-white font-semibold hover:bg-red-700">
+        Sign Out
+      </button>
     </div>
   </nav>
 
@@ -73,7 +119,6 @@
   <!-- Features Section -->
   <section class="bg-white bg-opacity-90 backdrop-blur-md max-w-7xl mx-auto px-6 py-16 rounded-lg shadow-lg mb-20">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-gray-800 font-medium max-w-4xl mx-auto">
-
       <!-- Expert Mentors -->
       <div class="flex gap-4 items-start">
         <div class="flex-shrink-0 flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-lg" aria-hidden="true">
@@ -126,7 +171,6 @@
           <p>Access round-the-clock mentor guidance to clarify doubts and stay motivated.</p>
         </div>
       </div>
-
     </div>
   </section>
 
@@ -136,7 +180,7 @@
   </footer>
 
   <script>
-    // Your Firebase config
+    // Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyB5wSwO1J8wQq1EdJoaRhAUo4LwVjrqHgY",
       authDomain: "antidote-5c36d.firebaseapp.com",
@@ -149,28 +193,51 @@
 
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
-
     const auth = firebase.auth();
 
-    // DOM Elements
+    // DOM elements
     const signInLink = document.getElementById('sign-in-link');
     const signOutBtn = document.getElementById('sign-out-btn');
 
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    const mobileSignInLink = document.getElementById('mobile-sign-in-link');
+    const mobileSignOutBtn = document.getElementById('mobile-sign-out-btn');
+
+    // Toggle mobile menu
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Firebase Auth state listener
     auth.onAuthStateChanged(user => {
       if (user) {
-        // User is signed in
+        // User is signed in: hide sign-in, show sign-out
         signInLink.classList.add('hidden');
         signOutBtn.classList.remove('hidden');
+        mobileSignInLink.classList.add('hidden');
+        mobileSignOutBtn.classList.remove('hidden');
       } else {
-        // No user signed in
+        // No user signed in: show sign-in, hide sign-out
         signInLink.classList.remove('hidden');
         signOutBtn.classList.add('hidden');
+        mobileSignInLink.classList.remove('hidden');
+        mobileSignOutBtn.classList.add('hidden');
       }
     });
 
+    // Sign out action desktop
     signOutBtn.addEventListener('click', () => {
       auth.signOut().then(() => {
-        window.location.href = 'index.html'; // Reload homepage after sign-out
+        window.location.href = 'index.html';
+      });
+    });
+
+    // Sign out action mobile
+    mobileSignOutBtn.addEventListener('click', () => {
+      auth.signOut().then(() => {
+        window.location.href = 'index.html';
       });
     });
   </script>
