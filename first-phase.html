@@ -14,13 +14,15 @@
       <a href="index.html" class="text-2xl font-bold text-blue-800">Antidote Medical Academy</a>
 
       <div class="flex space-x-6 items-center">
-        <a href="cart.html" class="text-gray-700 hover:text-blue-600 font-medium flex items-center space-x-1">
+        <a href="cart.html" class="relative text-gray-700 hover:text-blue-600 font-medium flex items-center space-x-1">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4" />
             <circle cx="7" cy="21" r="1" />
             <circle cx="17" cy="21" r="1" />
           </svg>
           <span>Cart</span>
+          <!-- Cart count badge -->
+          <span id="cart-count" class="absolute -top-2 -right-3 bg-red-600 text-white text-xs font-bold rounded-full px-2 py-0.5 hidden">0</span>
         </a>
         <a href="signin.html" class="text-gray-700 hover:text-blue-600 font-medium">Sign In</a>
       </div>
@@ -92,6 +94,17 @@
 
   <!-- JavaScript -->
   <script>
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const countEl = document.getElementById("cart-count");
+      if (cart.length > 0) {
+        countEl.textContent = cart.length;
+        countEl.classList.remove("hidden");
+      } else {
+        countEl.classList.add("hidden");
+      }
+    }
+
     function handleAddToCart(name, price) {
       const isUserSignedIn = localStorage.getItem("isSignedIn") === "true";
 
@@ -101,22 +114,23 @@
         return;
       }
 
-      // Get current cart or create empty array
       let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-      // Check if item already in cart
       const existingItemIndex = cart.findIndex(item => item.name === name);
       if (existingItemIndex !== -1) {
         alert("This course is already in your cart.");
         return;
       }
 
-      // Add new course to cart
       cart.push({ name, price });
       localStorage.setItem("cart", JSON.stringify(cart));
 
       alert(`${name} added to cart!`);
+      updateCartCount(); // Update badge count after adding
     }
+
+    // Update cart count on page load
+    window.addEventListener("DOMContentLoaded", updateCartCount);
   </script>
 
 </body>
