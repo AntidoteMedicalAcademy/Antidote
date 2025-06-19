@@ -12,71 +12,78 @@
   <nav class="bg-white shadow p-4 sticky top-0 z-50">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
       <a href="index.html" class="text-2xl font-bold text-blue-800">Antidote Medical Academy</a>
-      <a href="firstphase.html" class="text-blue-600 hover:underline">Back to Courses</a>
+
+      <div class="flex space-x-6 items-center">
+        <a href="firstphase.html" class="text-gray-700 hover:text-blue-600 font-medium">Courses</a>
+        <a href="signin.html" class="text-gray-700 hover:text-blue-600 font-medium">Sign In</a>
+      </div>
     </div>
   </nav>
 
-  <main class="max-w-4xl mx-auto p-6">
-    <h1 class="text-3xl font-bold mb-6 text-gray-800">Your Cart</h1>
-    <div id="cartContainer" class="bg-white rounded shadow p-4">
-      <!-- Cart items will be injected here -->
+  <main class="max-w-4xl mx-auto px-4 py-10">
+    <h1 class="text-3xl font-bold mb-6">Your Cart</h1>
+    <div id="cart-items" class="bg-white rounded shadow p-6">
+      <!-- Cart items will be rendered here -->
     </div>
-    <div id="totalPrice" class="mt-4 text-xl font-semibold text-gray-900"></div>
+    <div id="checkout-section" class="mt-6 text-right">
+      <!-- Checkout button will appear here if cart has items -->
+    </div>
   </main>
 
   <script>
-    // Define course prices, must match firstphase.html
-    const coursePrices = {
-      "Antidote To First Card": 0,
-      "Antidote To Second Card": 680,
-      "Antidote To Third Card": 700,
-      "Antidote To Fourth Card": 550,
-      "Antidote To Fifth Card": 630,
-      "Antidote To Sixth Card": 580
-    };
+    function loadCart() {
+      const cartItemsDiv = document.getElementById('cart-items');
+      const checkoutSection = document.getElementById('checkout-section');
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    function renderCart() {
-      const cartContainer = document.getElementById('cartContainer');
-      const totalPriceEl = document.getElementById('totalPrice');
-      let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-      if(cart.length === 0) {
-        cartContainer.innerHTML = "<p class='text-gray-700'>Your cart is empty.</p>";
-        totalPriceEl.textContent = '';
+      if (cart.length === 0) {
+        cartItemsDiv.innerHTML = '<p class="text-gray-600">Your cart is empty.</p>';
+        checkoutSection.innerHTML = ''; // no checkout button
         return;
       }
 
-      let total = 0;
       let html = '<ul class="divide-y divide-gray-200">';
-      cart.forEach((course, index) => {
-        const price = coursePrices[course] ?? 0;
-        total += price;
-
+      let total = 0;
+      cart.forEach((item, index) => {
         html += `
-          <li class="flex justify-between items-center py-3">
-            <span>${course}</span>
-            <div class="flex items-center space-x-4">
-              <span>${price === 0 ? 'Free' : price + ' Taka'}</span>
-              <button onclick="removeFromCart(${index})" class="text-red-600 hover:text-red-800 font-semibold">Remove</button>
+          <li class="py-4 flex justify-between items-center">
+            <div>
+              <span class="font-semibold">${item.name}</span><br />
+              <span class="text-sm text-gray-500">${item.price === 0 ? 'Free' : item.price + ' Taka'}</span>
             </div>
-          </li>
-        `;
+            <div class="flex items-center space-x-4">
+              <span class="font-semibold">${item.price === 0 ? 'Free' : item.price + ' Taka'}</span>
+              <button onclick="removeFromCart(${index})" class="text-red-600 hover:text-red-800 font-bold">Remove</button>
+            </div>
+          </li>`;
+        total += item.price;
       });
-      html += '</ul>';
-      cartContainer.innerHTML = html;
+      html += `</ul>
+        <div class="mt-6 text-right font-semibold text-lg">
+          Total: ${total} Taka
+        </div>
+      `;
 
-      totalPriceEl.textContent = `Total: ${total} Taka`;
+      cartItemsDiv.innerHTML = html;
+
+      // Show checkout button
+      checkoutSection.innerHTML = `<button onclick="checkout()" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Checkout</button>`;
     }
 
     function removeFromCart(index) {
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
       cart.splice(index, 1);
       localStorage.setItem('cart', JSON.stringify(cart));
-      renderCart();
+      loadCart();
     }
 
-    // Render cart on page load
-    renderCart();
+    function checkout() {
+      localStorage.removeItem('cart');
+      alert("Thank you for your purchase! Your cart is now empty.");
+      loadCart();
+    }
+
+    window.onload = loadCart;
   </script>
 
 </body>
