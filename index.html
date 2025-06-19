@@ -5,33 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Antidote Medical Academy</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    /* Show dropdown on hover */
-    .group:hover .group-hover:block {
-      display: block;
-    }
-  </style>
 </head>
 <body class="bg-gray-50 font-sans">
 
   <!-- Navbar -->
-  <nav class="bg-white shadow p-4">
+  <nav class="bg-white shadow p-4 sticky top-0 z-50">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
-      <h1 class="text-2xl font-bold text-blue-800">Antidote Medical Academy</h1>
+      <!-- Logo / Brand -->
+      <a href="#" class="text-2xl font-bold text-blue-800">Antidote Medical Academy</a>
+
+      <!-- Navigation Links -->
       <div class="flex space-x-6 items-center">
         
-        <!-- Dropdown Start -->
+        <!-- Dropdown for Admission -->
         <div class="relative group">
-          <button class="text-gray-700 hover:text-blue-600 font-medium">Admission</button>
-          <div class="absolute z-10 hidden group-hover:block bg-white shadow-lg mt-2 rounded">
-            <a href="#phase1" class="block px-4 py-2 hover:bg-blue-100">First Phase</a>
-            <a href="#" class="block px-4 py-2 text-gray-400 cursor-not-allowed">Second Phase</a>
-            <a href="#" class="block px-4 py-2 text-gray-400 cursor-not-allowed">Third Phase</a>
-            <a href="#" class="block px-4 py-2 text-gray-400 cursor-not-allowed">Fourth Phase</a>
-          </div>
-        </div>
-        <!-- Dropdown End -->
+  <button class="text-gray-700 hover:text-blue-600 font-medium">Admission</button>
+  <div class="absolute hidden group-hover:block bg-white shadow-lg rounded w-40 top-full left-0">
+    <a href="#phase1" class="block px-4 py-2 hover:bg-blue-100 text-gray-700">First Phase</a>
+    <a href="#" class="block px-4 py-2 text-gray-400 cursor-not-allowed">Second Phase</a>
+    <a href="#" class="block px-4 py-2 text-gray-400 cursor-not-allowed">Third Phase</a>
+    <a href="#" class="block px-4 py-2 text-gray-400 cursor-not-allowed">Fourth Phase</a>
+  </div>
+</div>
 
+        </div>
+
+        <!-- Static Links -->
         <a href="#" class="text-gray-700 hover:text-blue-600 font-medium">Publication</a>
         <a href="#" class="text-gray-700 hover:text-blue-600 font-medium">About Us</a>
         <a href="#" class="text-white bg-blue-600 px-4 py-2 rounded hover:bg-blue-700">Sign In</a>
@@ -39,10 +38,11 @@
     </div>
   </nav>
 
-  <!-- First Phase Courses -->
+  <!-- First Phase Courses Section -->
   <section id="phase1" class="max-w-6xl mx-auto px-4 py-10">
-    <h2 class="text-2xl font-semibold mb-4 text-gray-800">First Phase Courses</h2>
+    <h2 class="text-3xl font-semibold mb-6 text-gray-800">First Phase Courses</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      
       <!-- Course Card 1 -->
       <div class="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden">
         <img src="course1.jpg" alt="Course 1 Poster" class="w-full h-48 object-cover">
@@ -59,7 +59,16 @@
         </div>
       </div>
 
+      <!-- Course Card 3 -->
+      <div class="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden">
+        <img src="course3.jpg" alt="Course 3 Poster" class="w-full h-48 object-cover">
+        <div class="p-4">
+          <h3 class="text-lg font-semibold text-gray-800">Course Title 3</h3>
+        </div>
+      </div>
+
       <!-- Add More Cards as Needed -->
+
     </div>
   </section>
 
