@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>First Phase Courses - Antidote Medical Academy</title>
@@ -14,6 +17,30 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyB5wSwO1J8wQq1EdJoaRhAUo4LwVjrqHgY",
+    authDomain: "antidote-5c36d.firebaseapp.com",
+    projectId: "antidote-5c36d",
+    storageBucket: "antidote-5c36d.appspot.com",
+    messagingSenderId: "643376487279",
+    appId: "1:643376487279:web:9ac6ab3bc4e0711b8da69a",
+    measurementId: "G-N9MEQYS35D"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+    <script>
+  firebase.auth().onAuthStateChanged(user => {
+    if (!user) {
+      // Not signed in — redirect to sign-in page
+      alert("You must be signed in to access this page.");
+      window.location.href = "signin.html";
+    }
+  });
+</script>
+
+</script>
+
 </head>
 <body class="bg-gray-50 font-sans">
 
