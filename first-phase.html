@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>First Phase Courses - Antidote Medical Academy</title>
 
-  <!-- Firebase SDKs -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <script>
-    const firebaseConfig = {
+    // Firebase Initialization
+    firebase.initializeApp({
       apiKey: "AIzaSyB5wSwO1J8wQq1EdJoaRhAUo4LwVjrqHgY",
       authDomain: "antidote-5c36d.firebaseapp.com",
       projectId: "antidote-5c36d",
@@ -21,93 +22,74 @@
       messagingSenderId: "643376487279",
       appId: "1:643376487279:web:9ac6ab3bc4e0711b8da69a",
       measurementId: "G-N9MEQYS35D"
-    };
-    firebase.initializeApp(firebaseConfig);
+    });
   </script>
 </head>
-<body class="bg-gray-50 font-sans min-h-screen flex flex-col">
+
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
 
   <!-- Navbar -->
-  <nav class="bg-white shadow p-4 sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto flex flex-wrap justify-between items-center gap-4">
-      <a href="index.html" class="flex items-center space-x-3 flex-grow sm:flex-grow-0">
-        <img src="logo.png" alt="Antidote Medical Academy Logo" class="h-10 w-auto" />
-        <span class="text-2xl font-bold text-blue-800 whitespace-nowrap">Antidote Medical Academy</span>
+  <header class="bg-white shadow p-4 sticky top-0 z-50">
+    <nav class="max-w-6xl mx-auto flex justify-between items-center flex-wrap">
+      <a href="index.html" class="flex items-center space-x-3">
+        <img src="logo.png" alt="Antidote Medical Academy" class="h-10 w-auto" />
+        <span class="text-xl font-bold text-blue-800">Antidote Medical Academy</span>
       </a>
 
-      <div class="flex space-x-6 items-center">
-        <a href="cart.html" class="relative text-gray-700 hover:text-blue-600 font-medium flex items-center space-x-1">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" >
+      <div class="flex space-x-4 items-center mt-4 sm:mt-0">
+        <a href="cart.html" class="relative flex items-center gap-1 text-gray-700 hover:text-blue-600 font-medium">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4" />
             <circle cx="7" cy="21" r="1" />
             <circle cx="17" cy="21" r="1" />
           </svg>
           <span>Cart</span>
-          <span id="cart-count" class="absolute -top-2 -right-3 bg-red-600 text-white text-xs font-bold rounded-full px-2 py-0.5 hidden">0</span>
+          <span id="cart-count" class="absolute -top-2 -right-3 bg-red-600 text-white text-xs rounded-full px-2 hidden">0</span>
         </a>
 
-        <!-- Show these conditionally -->
-        <a href="signin.html" id="sign-in-link" class="text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap">Sign In</a>
-        <a href="dashboard.html" id="dashboard-link" class="hidden text-green-600 hover:text-green-800 font-medium whitespace-nowrap">Dashboard</a>
-        <button id="sign-out-btn" class="hidden text-red-600 hover:text-red-800 font-medium whitespace-nowrap">Sign Out</button>
+        <a id="sign-in-link" href="signin.html" class="text-gray-700 hover:text-blue-600">Sign In</a>
+        <a id="dashboard-link" href="dashboard.html" class="hidden text-green-700 hover:text-green-900">Dashboard</a>
+        <button id="sign-out-btn" class="hidden text-red-600 hover:text-red-800">Sign Out</button>
       </div>
-    </div>
-  </nav>
+    </nav>
+  </header>
 
-  <!-- Main Section -->
+  <!-- Main Content -->
   <main class="max-w-6xl mx-auto px-4 py-10 flex-grow w-full">
-    <h1 class="text-3xl sm:text-4xl font-bold mb-6 text-gray-800 text-center sm:text-left">First Phase Courses Details</h1>
-    <p class="text-gray-700 mb-8 max-w-3xl mx-auto sm:mx-0 text-center sm:text-left">
-      Welcome to the detailed page for the First Phase courses.
-    </p>
+    <h1 class="text-3xl sm:text-4xl font-bold text-center sm:text-left mb-6">First Phase Courses</h1>
+    <p class="text-gray-600 mb-8 text-center sm:text-left">Choose your course and start your journey.</p>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      <!-- Course Cards -->
-      <template id="course-template">
-        <div class="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden flex flex-col">
-          <img src="" alt="" class="w-full h-48 object-cover" />
-          <div class="p-4 flex flex-col flex-grow">
-            <h3 class="text-lg font-semibold text-gray-800 mb-1 course-name"></h3>
-            <p class="mb-4 font-semibold course-price"></p>
-            <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 add-to-cart-btn">Add to cart</button>
-          </div>
+    <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" id="courses-container"></section>
+
+    <!-- Course Card Template -->
+    <template id="course-template">
+      <div class="bg-white shadow rounded-lg overflow-hidden flex flex-col transition hover:shadow-lg">
+        <img src="" alt="Course Image" loading="lazy" class="w-full h-48 object-cover">
+        <div class="p-4 flex flex-col justify-between flex-grow">
+          <h3 class="text-lg font-semibold mb-1 course-name"></h3>
+          <p class="text-sm text-gray-600 mb-4 course-price"></p>
+          <button class="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 add-to-cart-btn">Add to Cart</button>
         </div>
-      </template>
-    </div>
+      </div>
+    </template>
   </main>
 
-  <!-- JavaScript -->
+  <!-- Footer -->
+  <footer class="bg-white text-center text-gray-500 text-sm p-4">
+    &copy; 2025 Antidote Medical Academy. All rights reserved.
+  </footer>
+
+  <!-- Script -->
   <script>
     const auth = firebase.auth();
+    const container = document.getElementById('courses-container');
+    const template = document.getElementById('course-template');
+    const cartCountEl = document.getElementById('cart-count');
 
     const signInLink = document.getElementById('sign-in-link');
     const dashboardLink = document.getElementById('dashboard-link');
     const signOutBtn = document.getElementById('sign-out-btn');
-    const cartCountEl = document.getElementById('cart-count');
 
-    // Redirect to signin if not logged in, otherwise show/hide nav links
-    auth.onAuthStateChanged(user => {
-      if (!user) {
-        alert("You must be signed in to access this page.");
-        window.location.href = "signin.html";
-      } else {
-        // User signed in, show dashboard and sign out, hide sign in
-        signInLink.classList.add('hidden');
-        dashboardLink.classList.remove('hidden');
-        signOutBtn.classList.remove('hidden');
-      }
-    });
-
-    signOutBtn.addEventListener('click', () => {
-      auth.signOut().then(() => {
-        alert("Signed out successfully.");
-        window.location.href = "signin.html";
-      }).catch(error => {
-        alert("Error signing out: " + error.message);
-      });
-    });
-
-    // Courses data array
     const courses = [
       { name: 'Antidote To First Card', price: 0, img: 'Source 1.jpg' },
       { name: 'Antidote To Second Card', price: 680, img: 'Source 2.jpg' },
@@ -117,57 +99,59 @@
       { name: 'Antidote To Sixth Card', price: 580, img: 'Source 6.jpg' },
     ];
 
-    const container = document.querySelector('main > div.grid');
-    const template = document.getElementById('course-template');
+    // Auth state listener
+    auth.onAuthStateChanged(user => {
+      if (!user) {
+        alert("You must be signed in to view this page.");
+        return location.href = "signin.html";
+      }
+      signInLink.classList.add('hidden');
+      dashboardLink.classList.remove('hidden');
+      signOutBtn.classList.remove('hidden');
+    });
+
+    // Sign out logic
+    signOutBtn.addEventListener('click', () => {
+      auth.signOut().then(() => {
+        alert("Signed out successfully.");
+        location.href = "signin.html";
+      });
+    });
 
     function updateCartCount() {
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
       if (cart.length > 0) {
         cartCountEl.textContent = cart.length;
-        cartCountEl.classList.remove("hidden");
+        cartCountEl.classList.remove('hidden');
       } else {
-        cartCountEl.classList.add("hidden");
+        cartCountEl.classList.add('hidden');
       }
     }
 
-    function handleAddToCart(name, price) {
+    function addToCart(course) {
       const user = auth.currentUser;
-      if (!user) {
-        alert("Please sign in to add items to your cart.");
-        window.location.href = "signin.html";
-        return;
+      if (!user) return alert("Please sign in to add items.");
+
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      if (cart.find(item => item.name === course.name)) {
+        return alert("This course is already in your cart.");
       }
 
-      let cart = JSON.parse(localStorage.getItem("cart")) || [];
-      if (cart.find(item => item.name === name)) {
-        alert("This course is already in your cart.");
-        return;
-      }
-
-      cart.push({ name, price });
-      localStorage.setItem("cart", JSON.stringify(cart));
-
-      alert(`${name} added to cart!`);
+      cart.push({ name: course.name, price: course.price });
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert(`${course.name} added to cart.`);
       updateCartCount();
     }
 
-    // Render courses dynamically
     function renderCourses() {
-      courses.forEach(({name, price, img}) => {
+      courses.forEach(course => {
         const clone = template.content.cloneNode(true);
         const card = clone.querySelector('div');
-        const image = clone.querySelector('img');
-        const courseName = clone.querySelector('.course-name');
-        const coursePrice = clone.querySelector('.course-price');
-        const btn = clone.querySelector('button');
-
-        image.src = img;
-        image.alt = name;
-        courseName.textContent = name;
-        coursePrice.textContent = price === 0 ? 'Free' : price + ' Taka';
-
-        btn.addEventListener('click', () => handleAddToCart(name, price));
-
+        card.querySelector('img').src = course.img;
+        card.querySelector('img').alt = course.name;
+        card.querySelector('.course-name').textContent = course.name;
+        card.querySelector('.course-price').textContent = course.price === 0 ? 'Free' : `${course.price} Taka`;
+        card.querySelector('button').addEventListener('click', () => addToCart(course));
         container.appendChild(clone);
       });
     }
