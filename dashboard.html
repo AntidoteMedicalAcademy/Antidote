@@ -29,17 +29,13 @@
   <main class="max-w-4xl mx-auto px-4 py-10 space-y-10">
     <section>
       <h1 class="text-3xl font-bold mb-4 text-gray-800">Welcome, <span id="user-email">User</span> 👋</h1>
-      <p class="text-gray-600">Manage your courses below:</p>
+      <p class="text-gray-600">Your enrolled courses are listed below.</p>
     </section>
 
-    <!-- Add Course Form -->
-    <section class="bg-white rounded-lg shadow p-6">
-      <h2 class="text-xl font-semibold mb-4 text-blue-800">Add a New Course</h2>
-      <form id="courseForm" class="space-y-4">
-        <input type="text" id="courseName" placeholder="Course Name" class="w-full px-4 py-2 border rounded" required />
-        <textarea id="courseDesc" placeholder="Course Description" class="w-full px-4 py-2 border rounded" required></textarea>
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add Course</button>
-      </form>
+    <!-- Redirect to Add Course -->
+    <section class="bg-white rounded-lg shadow p-6 flex items-center justify-between">
+      <h2 class="text-xl font-semibold text-blue-800">Want to add a new course?</h2>
+      <a href="first-phase.html" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add Course</a>
     </section>
 
     <!-- Course List -->
@@ -70,57 +66,35 @@
     const userEmailSpan = document.getElementById('user-email');
     const coursesList = document.getElementById('coursesList');
     const signOutBtn = document.getElementById('signOutBtn');
-    const courseForm = document.getElementById('courseForm');
 
     let currentUser = null;
 
     auth.onAuthStateChanged(async (user) => {
       if (!user) return (window.location.href = "signin.html");
-
       currentUser = user;
       userEmailSpan.textContent = user.email;
-      loadCourses(user.email);
+      loadCourses();
     });
 
-    courseForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const name = document.getElementById('courseName').value.trim();
-      const desc = document.getElementById('courseDesc').value.trim();
-
-      if (!name || !desc || !currentUser) return;
-
-      try {
-        await db.collection('courses').add({
-          courseName: name,
-          courseDesc: desc,
-          userEmail: currentUser.email,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-
-        courseForm.reset();
-        loadCourses(currentUser.email);
-        alert('Course added successfully!');
-      } catch (error) {
-        console.error("Error adding course:", error);
-        alert('Error adding course. Try again.');
-      }
-    });
-
-    async function loadCourses(email) {
+    async function loadCourses() {
       coursesList.innerHTML = '';
-
       try {
-        const snapshot = await db.collection('courses').where('userEmail', '==', email).orderBy('createdAt', 'desc').get();
+        const snapshot = await db.collection('users')
+          .doc(currentUser.uid)
+          .collection('courses')
+          .orderBy('enrolledAt', 'desc')
+          .get();
 
         if (snapshot.empty) {
-          coursesList.innerHTML = '<li>You haven\'t added any courses yet.</li>';
+          coursesList.innerHTML = '<li>You have not purchased any courses yet.</li>';
           return;
         }
 
         snapshot.forEach(doc => {
-          const { courseName } = doc.data();
+          const { name, enrolledAt } = doc.data();
           const li = document.createElement('li');
-          li.textContent = courseName;
+          const date = enrolledAt?.toDate().toLocaleDateString() || 'Unknown date';
+          li.innerHTML = `<strong>${name}</strong> <span class="text-sm text-gray-500">(Enrolled on ${date})</span>`;
           coursesList.appendChild(li);
         });
       } catch (err) {
