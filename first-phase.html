@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -25,19 +25,19 @@
     firebase.initializeApp(firebaseConfig);
   </script>
 </head>
-<body class="bg-gray-50 font-sans">
+<body class="bg-gray-50 font-sans min-h-screen flex flex-col">
 
   <!-- Navbar -->
   <nav class="bg-white shadow p-4 sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto flex justify-between items-center">
-      <a href="index.html" class="flex items-center space-x-3">
+    <div class="max-w-6xl mx-auto flex flex-wrap justify-between items-center gap-4">
+      <a href="index.html" class="flex items-center space-x-3 flex-grow sm:flex-grow-0">
         <img src="logo.png" alt="Antidote Medical Academy Logo" class="h-10 w-auto" />
-        <span class="text-2xl font-bold text-blue-800">Antidote Medical Academy</span>
+        <span class="text-2xl font-bold text-blue-800 whitespace-nowrap">Antidote Medical Academy</span>
       </a>
 
       <div class="flex space-x-6 items-center">
         <a href="cart.html" class="relative text-gray-700 hover:text-blue-600 font-medium flex items-center space-x-1">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" >
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4" />
             <circle cx="7" cy="21" r="1" />
             <circle cx="17" cy="21" r="1" />
@@ -45,71 +45,30 @@
           <span>Cart</span>
           <span id="cart-count" class="absolute -top-2 -right-3 bg-red-600 text-white text-xs font-bold rounded-full px-2 py-0.5 hidden">0</span>
         </a>
-        <a href="signin.html" class="text-gray-700 hover:text-blue-600 font-medium">Sign In</a>
+        <a href="signin.html" class="text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap">Sign In</a>
       </div>
     </div>
   </nav>
 
   <!-- Main Section -->
-  <main class="max-w-6xl mx-auto px-4 py-10">
-    <h1 class="text-4xl font-bold mb-6 text-gray-800">First Phase Courses Details</h1>
-    <p class="text-gray-700 mb-8">Welcome to the detailed page for the First Phase courses.</p>
+  <main class="max-w-6xl mx-auto px-4 py-10 flex-grow w-full">
+    <h1 class="text-3xl sm:text-4xl font-bold mb-6 text-gray-800 text-center sm:text-left">First Phase Courses Details</h1>
+    <p class="text-gray-700 mb-8 max-w-3xl mx-auto sm:mx-0 text-center sm:text-left">
+      Welcome to the detailed page for the First Phase courses.
+    </p>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       <!-- Course Cards -->
-      <div class="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden flex flex-col">
-        <img src="Source 1.jpg" alt="Antidote To First Card" class="w-full h-48 object-cover" />
-        <div class="p-4 flex flex-col flex-grow">
-          <h3 class="text-lg font-semibold text-gray-800 mb-1">Antidote To First Card</h3>
-          <p class="mb-4 font-semibold">Free</p>
-          <button onclick="handleAddToCart('Antidote To First Card', 0)" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add to cart</button>
+      <template id="course-template">
+        <div class="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden flex flex-col">
+          <img src="" alt="" class="w-full h-48 object-cover" />
+          <div class="p-4 flex flex-col flex-grow">
+            <h3 class="text-lg font-semibold text-gray-800 mb-1 course-name"></h3>
+            <p class="mb-4 font-semibold course-price"></p>
+            <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 add-to-cart-btn">Add to cart</button>
+          </div>
         </div>
-      </div>
-
-      <div class="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden flex flex-col">
-        <img src="Source 2.jpg" alt="Antidote To Second Card" class="w-full h-48 object-cover" />
-        <div class="p-4 flex flex-col flex-grow">
-          <h3 class="text-lg font-semibold text-gray-800 mb-1">Antidote To Second Card</h3>
-          <p class="mb-4 font-semibold">680 Taka</p>
-          <button onclick="handleAddToCart('Antidote To Second Card', 680)" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add to cart</button>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden flex flex-col">
-        <img src="Source 3.jpg" alt="Antidote To Third Card" class="w-full h-48 object-cover" />
-        <div class="p-4 flex flex-col flex-grow">
-          <h3 class="text-lg font-semibold text-gray-800 mb-1">Antidote To Third Card</h3>
-          <p class="mb-4 font-semibold">700 Taka</p>
-          <button onclick="handleAddToCart('Antidote To Third Card', 700)" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add to cart</button>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden flex flex-col">
-        <img src="Source 4.jpg" alt="Antidote To Fourth Card" class="w-full h-48 object-cover" />
-        <div class="p-4 flex flex-col flex-grow">
-          <h3 class="text-lg font-semibold text-gray-800 mb-1">Antidote To Fourth Card</h3>
-          <p class="mb-4 font-semibold">550 Taka</p>
-          <button onclick="handleAddToCart('Antidote To Fourth Card', 550)" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add to cart</button>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden flex flex-col">
-        <img src="Source 5.jpg" alt="Antidote To Fifth Card" class="w-full h-48 object-cover" />
-        <div class="p-4 flex flex-col flex-grow">
-          <h3 class="text-lg font-semibold text-gray-800 mb-1">Antidote To Fifth Card</h3>
-          <p class="mb-4 font-semibold">630 Taka</p>
-          <button onclick="handleAddToCart('Antidote To Fifth Card', 630)" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add to cart</button>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden flex flex-col">
-        <img src="Source 6.jpg" alt="Antidote To Sixth Card" class="w-full h-48 object-cover" />
-        <div class="p-4 flex flex-col flex-grow">
-          <h3 class="text-lg font-semibold text-gray-800 mb-1">Antidote To Sixth Card</h3>
-          <p class="mb-4 font-semibold">580 Taka</p>
-          <button onclick="handleAddToCart('Antidote To Sixth Card', 580)" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add to cart</button>
-        </div>
-      </div>
+      </template>
     </div>
   </main>
 
@@ -122,6 +81,19 @@
         window.location.href = "signin.html";
       }
     });
+
+    // Courses data array
+    const courses = [
+      { name: 'Antidote To First Card', price: 0, img: 'Source 1.jpg' },
+      { name: 'Antidote To Second Card', price: 680, img: 'Source 2.jpg' },
+      { name: 'Antidote To Third Card', price: 700, img: 'Source 3.jpg' },
+      { name: 'Antidote To Fourth Card', price: 550, img: 'Source 4.jpg' },
+      { name: 'Antidote To Fifth Card', price: 630, img: 'Source 5.jpg' },
+      { name: 'Antidote To Sixth Card', price: 580, img: 'Source 6.jpg' },
+    ];
+
+    const container = document.querySelector('main > div.grid');
+    const template = document.getElementById('course-template');
 
     function updateCartCount() {
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -155,7 +127,31 @@
       updateCartCount();
     }
 
-    window.addEventListener("DOMContentLoaded", updateCartCount);
+    // Render courses dynamically for DRY code
+    function renderCourses() {
+      courses.forEach(({name, price, img}) => {
+        const clone = template.content.cloneNode(true);
+        const card = clone.querySelector('div');
+        const image = clone.querySelector('img');
+        const courseName = clone.querySelector('.course-name');
+        const coursePrice = clone.querySelector('.course-price');
+        const btn = clone.querySelector('button');
+
+        image.src = img;
+        image.alt = name;
+        courseName.textContent = name;
+        coursePrice.textContent = price === 0 ? 'Free' : price + ' Taka';
+
+        btn.addEventListener('click', () => handleAddToCart(name, price));
+
+        container.appendChild(clone);
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderCourses();
+      updateCartCount();
+    });
   </script>
 </body>
 </html>
