@@ -1,46 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>First Phase Courses - Antidote Medical Academy</title>
-  <!-- Firebase App (the core Firebase SDK) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 
-<!-- Firebase Authentication SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-
-<!-- Firebase Firestore SDK (database) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
   <script src="https://cdn.tailwindcss.com"></script>
+
   <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyB5wSwO1J8wQq1EdJoaRhAUo4LwVjrqHgY",
-    authDomain: "antidote-5c36d.firebaseapp.com",
-    projectId: "antidote-5c36d",
-    storageBucket: "antidote-5c36d.appspot.com",
-    messagingSenderId: "643376487279",
-    appId: "1:643376487279:web:9ac6ab3bc4e0711b8da69a",
-    measurementId: "G-N9MEQYS35D"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-    <script>
-  firebase.auth().onAuthStateChanged(user => {
-    if (!user) {
-      // Not signed in — redirect to sign-in page
-      alert("You must be signed in to access this page.");
-      window.location.href = "signin.html";
-    }
-  });
-</script>
-
-</script>
-
+    const firebaseConfig = {
+      apiKey: "AIzaSyB5wSwO1J8wQq1EdJoaRhAUo4LwVjrqHgY",
+      authDomain: "antidote-5c36d.firebaseapp.com",
+      projectId: "antidote-5c36d",
+      storageBucket: "antidote-5c36d.appspot.com",
+      messagingSenderId: "643376487279",
+      appId: "1:643376487279:web:9ac6ab3bc4e0711b8da69a",
+      measurementId: "G-N9MEQYS35D"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
 </head>
 <body class="bg-gray-50 font-sans">
 
@@ -48,10 +31,9 @@
   <nav class="bg-white shadow p-4 sticky top-0 z-50">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
       <a href="index.html" class="flex items-center space-x-3">
-  <img src="logo.png" alt="Antidote Medical Academy Logo" class="h-10 w-auto" />
-  <span class="text-2xl font-bold text-blue-800">Antidote Medical Academy</span>
-</a>
-
+        <img src="logo.png" alt="Antidote Medical Academy Logo" class="h-10 w-auto" />
+        <span class="text-2xl font-bold text-blue-800">Antidote Medical Academy</span>
+      </a>
 
       <div class="flex space-x-6 items-center">
         <a href="cart.html" class="relative text-gray-700 hover:text-blue-600 font-medium flex items-center space-x-1">
@@ -61,7 +43,6 @@
             <circle cx="17" cy="21" r="1" />
           </svg>
           <span>Cart</span>
-          <!-- Cart count badge -->
           <span id="cart-count" class="absolute -top-2 -right-3 bg-red-600 text-white text-xs font-bold rounded-full px-2 py-0.5 hidden">0</span>
         </a>
         <a href="signin.html" class="text-gray-700 hover:text-blue-600 font-medium">Sign In</a>
@@ -134,6 +115,14 @@
 
   <!-- JavaScript -->
   <script>
+    // Redirect if not signed in
+    firebase.auth().onAuthStateChanged(user => {
+      if (!user) {
+        alert("You must be signed in to access this page.");
+        window.location.href = "signin.html";
+      }
+    });
+
     function updateCartCount() {
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
       const countEl = document.getElementById("cart-count");
@@ -146,18 +135,15 @@
     }
 
     function handleAddToCart(name, price) {
-      const isUserSignedIn = localStorage.getItem("isSignedIn") === "true";
-
-      if (!isUserSignedIn) {
+      const user = firebase.auth().currentUser;
+      if (!user) {
         alert("Please sign in to add items to your cart.");
-        window.location.href = "signin.html"; // redirect to sign-in page
+        window.location.href = "signin.html";
         return;
       }
 
       let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-      const existingItemIndex = cart.findIndex(item => item.name === name);
-      if (existingItemIndex !== -1) {
+      if (cart.find(item => item.name === name)) {
         alert("This course is already in your cart.");
         return;
       }
@@ -166,12 +152,10 @@
       localStorage.setItem("cart", JSON.stringify(cart));
 
       alert(`${name} added to cart!`);
-      updateCartCount(); // Update badge count after adding
+      updateCartCount();
     }
 
-    // Update cart count on page load
     window.addEventListener("DOMContentLoaded", updateCartCount);
   </script>
-
 </body>
 </html>
