@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dashboard - Antidote Medical Academy</title>
 
-  <!-- Firebase Compat SDK -->
+  <!-- Firebase SDK (Compat version) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 font-sans min-h-screen flex flex-col">
@@ -28,7 +29,7 @@
   <!-- Main Content -->
   <main class="max-w-4xl mx-auto px-4 py-10 space-y-10 flex-grow w-full">
     <section>
-      <h1 class="text-3xl font-bold mb-4 text-gray-800 truncate">Welcome, <span id="user-email">User</span> 👋</h1>
+      <h1 class="text-3xl font-bold mb-4 text-gray-800">Welcome, <span id="user-email">User</span> 👋</h1>
       <p class="text-gray-600 max-w-lg">Your enrolled courses are listed below. Tap on any course to start learning.</p>
     </section>
 
@@ -47,11 +48,12 @@
     </section>
   </main>
 
+  <!-- Footer -->
   <footer class="bg-white text-center p-4 text-gray-500 text-sm">
     &copy; 2025 Antidote Medical Academy
   </footer>
 
-  <!-- Firebase Setup & Logic -->
+  <!-- Firebase Config and Logic -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyB5wSwO1J8wQq1EdJoaRhAUo4LwVjrqHgY",
@@ -73,41 +75,53 @@
 
     let currentUser = null;
 
+    // Handle Auth State
     auth.onAuthStateChanged(async (user) => {
-      if (!user) return (window.location.href = "signin.html");
+      if (!user) {
+        window.location.href = "signin.html";
+        return;
+      }
       currentUser = user;
       userEmailSpan.textContent = user.email;
       loadCourses();
     });
 
+    // Load Courses from Firestore
     async function loadCourses() {
       coursesList.innerHTML = '';
       try {
-        const snapshot = await db.collection('users')
+        const coursesRef = db
+          .collection("users")
           .doc(currentUser.uid)
-          .collection('courses')
-          .orderBy('enrolledAt', 'desc')
-          .get();
+          .collection("courses")
+          .orderBy("enrolledAt", "desc");
+
+        const snapshot = await coursesRef.get();
 
         if (snapshot.empty) {
-          coursesList.innerHTML = '<li>You have not purchased any courses yet.</li>';
+          coursesList.innerHTML = '<li class="text-gray-500 italic">You have not enrolled in any courses yet.</li>';
           return;
         }
 
         snapshot.forEach(doc => {
-          const { name, enrolledAt } = doc.data();
+          const course = doc.data();
+          const date = course.enrolledAt?.toDate().toLocaleDateString() || 'Unknown';
           const li = document.createElement('li');
-          const date = enrolledAt?.toDate().toLocaleDateString() || 'Unknown date';
-          li.innerHTML = `<strong>${name}</strong> <span class="text-sm text-gray-500">(Enrolled on ${date})</span>`;
+          li.innerHTML = `<strong>${course.name}</strong> <span class="text-sm text-gray-500">(Enrolled on ${date})</span>`;
           coursesList.appendChild(li);
         });
-      } catch (err) {
-        coursesList.innerHTML = `<li class="text-red-600">Failed to load courses: ${err.message}</li>`;
+
+      } catch (error) {
+        console.error("Failed to load courses:", error);
+        coursesList.innerHTML = `<li class="text-red-600">Error loading courses: ${error.message}</li>`;
       }
     }
 
+    // Sign Out
     signOutBtn.addEventListener('click', () => {
-      auth.signOut().then(() => (window.location.href = 'signin.html'));
+      auth.signOut().then(() => {
+        window.location.href = "signin.html";
+      });
     });
   </script>
 
