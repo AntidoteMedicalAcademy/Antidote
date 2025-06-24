@@ -4,35 +4,40 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Payment Success - Antidote Medical Academy</title>
-  <!-- Firebase App (the core Firebase SDK) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-
-<!-- Firebase Authentication SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-
-<!-- Firebase Firestore SDK (database) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 font-sans p-8">
+<body class="bg-gray-50 font-sans p-6 min-h-screen flex flex-col items-center">
 
-  <!-- Header with logo and clickable academy name -->
-  <header class="max-w-3xl mx-auto mb-8 flex items-center gap-4">
+  <!-- Header -->
+  <header class="max-w-3xl w-full mb-8 flex items-center gap-4 px-4 sm:px-0">
     <a href="index.html" class="flex items-center gap-3">
       <img src="logo.png" alt="Antidote Medical Academy Logo" class="w-10 h-10 object-contain" />
       <span class="text-3xl font-bold text-blue-800 hover:underline cursor-pointer">Antidote Medical Academy</span>
     </a>
   </header>
 
-  <h1 class="text-3xl font-bold mb-6">Payment Successful!</h1>
+  <main class="max-w-3xl w-full bg-white p-6 rounded shadow-md">
+    <h1 class="text-3xl font-bold mb-6 text-center text-green-700">Payment Successful!</h1>
 
-  <div id="success-info" class="bg-white p-6 rounded shadow max-w-3xl mx-auto mb-6">
-    <!-- Payment details and group links will appear here -->
-  </div>
+    <div id="success-info" class="mb-6 text-gray-800">
+      <!-- Payment details and group links will be injected here -->
+    </div>
+
+    <div class="flex justify-center">
+      <a href="dashboard.html" 
+         class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded shadow transition">
+        Go to Dashboard
+      </a>
+    </div>
+  </main>
 
   <script>
-    // Course -> Facebook group map
+    // Map courses to Facebook group links
     const groupLinks = {
       "Antidote To First Card": "https://www.facebook.com/groups/1250823519659781/",
       "Antidote To Second Card": "https://www.facebook.com/groups/1183623726302231",
@@ -46,16 +51,17 @@
       return Math.floor(100000 + Math.random() * 900000).toString();
     }
 
-    // Get cart from localStorage
+    // Get cart items from localStorage
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
     if (cart.length === 0) {
-      document.getElementById('success-info').innerHTML = '<p>Your cart was empty or payment info missing.</p>';
+      document.getElementById('success-info').innerHTML = 
+        '<p class="text-center text-red-600">Your cart was empty or payment info missing.</p>';
     } else {
-      let html = `<p class="mb-6">Thank you for your purchase! Below are your OTPs and group links for each course.</p>`;
+      let html = `<p class="mb-6 text-center">Thank you for your purchase! Below are your OTPs and group links for each course.</p>`;
       html += '<ul class="space-y-6">';
-      
-      // Retrieve or create dashboard data
+
+      // Retrieve or create dashboard data array
       let dashboard = JSON.parse(localStorage.getItem('dashboard')) || [];
 
       cart.forEach(item => {
@@ -63,14 +69,16 @@
         const groupLink = groupLinks[item.name] || "#";
 
         html += `
-          <li class="border p-4 rounded shadow-sm">
-            <h2 class="font-semibold text-lg">${item.name}</h2>
-            <p><strong>Your OTP:</strong> <code>${otp}</code></p>
-            <p>Join your course group here: <a href="${groupLink}" target="_blank" class="text-blue-600 hover:underline">${groupLink}</a></p>
+          <li class="border border-gray-200 p-4 rounded shadow-sm">
+            <h2 class="font-semibold text-lg mb-1">${item.name}</h2>
+            <p><strong>Your OTP:</strong> <code class="bg-gray-100 px-2 py-1 rounded">${otp}</code></p>
+            <p>Join your course group here: 
+              <a href="${groupLink}" target="_blank" rel="noopener" class="text-blue-600 hover:underline break-words">${groupLink}</a>
+            </p>
           </li>
         `;
 
-        // Save OTP & group link to dashboard storage
+        // Save purchase info to dashboard storage
         dashboard.push({
           course: item.name,
           otp,
@@ -80,15 +88,13 @@
       });
 
       html += '</ul>';
-
       document.getElementById('success-info').innerHTML = html;
 
-      // Save dashboard info persistently
+      // Save updated dashboard data persistently
       localStorage.setItem('dashboard', JSON.stringify(dashboard));
       // Clear the cart now that purchase is complete
       localStorage.removeItem('cart');
     }
   </script>
-
 </body>
 </html>
