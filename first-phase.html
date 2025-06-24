@@ -45,7 +45,11 @@
           <span>Cart</span>
           <span id="cart-count" class="absolute -top-2 -right-3 bg-red-600 text-white text-xs font-bold rounded-full px-2 py-0.5 hidden">0</span>
         </a>
-        <a href="signin.html" class="text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap">Sign In</a>
+
+        <!-- Show these conditionally -->
+        <a href="signin.html" id="sign-in-link" class="text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap">Sign In</a>
+        <a href="dashboard.html" id="dashboard-link" class="hidden text-green-600 hover:text-green-800 font-medium whitespace-nowrap">Dashboard</a>
+        <button id="sign-out-btn" class="hidden text-red-600 hover:text-red-800 font-medium whitespace-nowrap">Sign Out</button>
       </div>
     </div>
   </nav>
@@ -74,12 +78,33 @@
 
   <!-- JavaScript -->
   <script>
-    // Redirect if not signed in
-    firebase.auth().onAuthStateChanged(user => {
+    const auth = firebase.auth();
+
+    const signInLink = document.getElementById('sign-in-link');
+    const dashboardLink = document.getElementById('dashboard-link');
+    const signOutBtn = document.getElementById('sign-out-btn');
+    const cartCountEl = document.getElementById('cart-count');
+
+    // Redirect to signin if not logged in, otherwise show/hide nav links
+    auth.onAuthStateChanged(user => {
       if (!user) {
         alert("You must be signed in to access this page.");
         window.location.href = "signin.html";
+      } else {
+        // User signed in, show dashboard and sign out, hide sign in
+        signInLink.classList.add('hidden');
+        dashboardLink.classList.remove('hidden');
+        signOutBtn.classList.remove('hidden');
       }
+    });
+
+    signOutBtn.addEventListener('click', () => {
+      auth.signOut().then(() => {
+        alert("Signed out successfully.");
+        window.location.href = "signin.html";
+      }).catch(error => {
+        alert("Error signing out: " + error.message);
+      });
     });
 
     // Courses data array
@@ -97,17 +122,16 @@
 
     function updateCartCount() {
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
-      const countEl = document.getElementById("cart-count");
       if (cart.length > 0) {
-        countEl.textContent = cart.length;
-        countEl.classList.remove("hidden");
+        cartCountEl.textContent = cart.length;
+        cartCountEl.classList.remove("hidden");
       } else {
-        countEl.classList.add("hidden");
+        cartCountEl.classList.add("hidden");
       }
     }
 
     function handleAddToCart(name, price) {
-      const user = firebase.auth().currentUser;
+      const user = auth.currentUser;
       if (!user) {
         alert("Please sign in to add items to your cart.");
         window.location.href = "signin.html";
@@ -127,7 +151,7 @@
       updateCartCount();
     }
 
-    // Render courses dynamically for DRY code
+    // Render courses dynamically
     function renderCourses() {
       courses.forEach(({name, price, img}) => {
         const clone = template.content.cloneNode(true);
