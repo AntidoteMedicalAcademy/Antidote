@@ -19,6 +19,12 @@
       background: linear-gradient(135deg, #e0f2fe, #bae6fd);
       font-family: 'Inter', sans-serif;
     }
+    /* Reduce gap in Admission dropdown */
+    .dropdown-menu > a,
+    .dropdown-menu > span {
+      padding-top: 0.5rem;  /* 8px */
+      padding-bottom: 0.5rem; /* 8px */
+    }
   </style>
 </head>
 <body>
@@ -40,19 +46,20 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
             </svg>
           </button>
-          <div class="absolute hidden group-hover:block bg-white shadow-lg rounded w-48 mt-2 z-50">
-            <a href="first-phase.html" class="block px-4 py-2 hover:bg-blue-100">First Phase</a>
-            <span class="block px-4 py-2 text-gray-400 cursor-not-allowed">Second Phase</span>
-            <span class="block px-4 py-2 text-gray-400 cursor-not-allowed">Third Phase</span>
-            <span class="block px-4 py-2 text-gray-400 cursor-not-allowed">Fourth Phase</span>
+          <div class="dropdown-menu absolute hidden group-hover:block bg-white shadow-lg rounded w-48 mt-2 z-50">
+            <a href="first-phase.html" class="block px-4 hover:bg-blue-100">First Phase</a>
+            <span class="block px-4 text-gray-400 cursor-not-allowed">Second Phase</span>
+            <span class="block px-4 text-gray-400 cursor-not-allowed">Third Phase</span>
+            <span class="block px-4 text-gray-400 cursor-not-allowed">Fourth Phase</span>
           </div>
         </div>
 
         <a href="#" class="hover:text-blue-600 transition">Publication</a>
         <a href="#" class="hover:text-blue-600 transition">About Us</a>
 
-        <!-- Auth Buttons -->
+        <!-- Auth & Dashboard -->
         <a href="signin.html" id="sign-in-link" class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition">Sign In</a>
+        <a href="dashboard.html" id="dashboard-link" class="hidden bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition">Dashboard</a>
         <button id="sign-out-btn" class="hidden bg-red-600 text-white px-5 py-2 rounded-lg hover:bg-red-700 transition">Sign Out</button>
       </nav>
 
@@ -73,6 +80,7 @@
       <a href="#" class="block px-4 py-2 rounded hover:bg-blue-100">Publication</a>
       <a href="#" class="block px-4 py-2 rounded hover:bg-blue-100">About Us</a>
       <a href="signin.html" id="mobile-sign-in-link" class="block px-4 py-2 bg-blue-600 text-white text-center rounded hover:bg-blue-700">Sign In</a>
+      <a href="dashboard.html" id="mobile-dashboard-link" class="hidden block px-4 py-2 bg-green-600 text-white text-center rounded hover:bg-green-700">Dashboard</a>
       <button id="mobile-sign-out-btn" class="hidden w-full px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Sign Out</button>
     </div>
   </header>
@@ -166,6 +174,8 @@
 
     const signInLink = document.getElementById('sign-in-link');
     const signOutBtn = document.getElementById('sign-out-btn');
+    const dashboardLink = document.getElementById('dashboard-link');
+    const mobileDashboardLink = document.getElementById('mobile-dashboard-link');
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
     const mobileSignInLink = document.getElementById('mobile-sign-in-link');
@@ -179,8 +189,11 @@
       const signedIn = !!user;
       signInLink.classList.toggle('hidden', signedIn);
       signOutBtn.classList.toggle('hidden', !signedIn);
+      dashboardLink.classList.toggle('hidden', !signedIn);
+
       mobileSignInLink.classList.toggle('hidden', signedIn);
       mobileSignOutBtn.classList.toggle('hidden', !signedIn);
+      mobileDashboardLink.classList.toggle('hidden', !signedIn);
     });
 
     signOutBtn.addEventListener('click', () => auth.signOut().then(() => location.href = 'index.html'));
