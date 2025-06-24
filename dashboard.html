@@ -28,4 +28,109 @@
   <!-- Main Content -->
   <main class="max-w-4xl mx-auto px-4 py-10 space-y-10">
     <section>
-      <h1 class="text-3xl font-bold mb-4 text-gray-800">Welcome, <spa
+      <h1 class="text-3xl font-bold mb-4 text-gray-800">Welcome, <span id="user-email">User</span> 👋</h1>
+      <p class="text-gray-600">Manage your courses below:</p>
+    </section>
+
+    <!-- Add Course Form -->
+    <section class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-semibold mb-4 text-blue-800">Add a New Course</h2>
+      <form id="courseForm" class="space-y-4">
+        <input type="text" id="courseName" placeholder="Course Name" class="w-full px-4 py-2 border rounded" required />
+        <textarea id="courseDesc" placeholder="Course Description" class="w-full px-4 py-2 border rounded" required></textarea>
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add Course</button>
+      </form>
+    </section>
+
+    <!-- Course List -->
+    <section class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-semibold mb-4 text-blue-800">Your Courses</h2>
+      <ul id="coursesList" class="list-disc list-inside text-gray-700 min-h-[80px]">
+        <li>Loading...</li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- Firebase Setup & Logic -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB5wSwO1J8wQq1EdJoaRhAUo4LwVjrqHgY",
+      authDomain: "antidote-5c36d.firebaseapp.com",
+      projectId: "antidote-5c36d",
+      storageBucket: "antidote-5c36d.appspot.com",
+      messagingSenderId: "643376487279",
+      appId: "1:643376487279:web:9ac6ab3bc4e0711b8da69a",
+      measurementId: "G-N9MEQYS35D"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    const userEmailSpan = document.getElementById('user-email');
+    const coursesList = document.getElementById('coursesList');
+    const signOutBtn = document.getElementById('signOutBtn');
+    const courseForm = document.getElementById('courseForm');
+
+    let currentUser = null;
+
+    auth.onAuthStateChanged(async (user) => {
+      if (!user) return (window.location.href = "signin.html");
+
+      currentUser = user;
+      userEmailSpan.textContent = user.email;
+      loadCourses(user.email);
+    });
+
+    courseForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('courseName').value.trim();
+      const desc = document.getElementById('courseDesc').value.trim();
+
+      if (!name || !desc || !currentUser) return;
+
+      try {
+        await db.collection('courses').add({
+          courseName: name,
+          courseDesc: desc,
+          userEmail: currentUser.email,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        courseForm.reset();
+        loadCourses(currentUser.email);
+        alert('Course added successfully!');
+      } catch (error) {
+        console.error("Error adding course:", error);
+        alert('Error adding course. Try again.');
+      }
+    });
+
+    async function loadCourses(email) {
+      coursesList.innerHTML = '';
+
+      try {
+        const snapshot = await db.collection('courses').where('userEmail', '==', email).orderBy('createdAt', 'desc').get();
+
+        if (snapshot.empty) {
+          coursesList.innerHTML = '<li>You haven\'t added any courses yet.</li>';
+          return;
+        }
+
+        snapshot.forEach(doc => {
+          const { courseName } = doc.data();
+          const li = document.createElement('li');
+          li.textContent = courseName;
+          coursesList.appendChild(li);
+        });
+      } catch (err) {
+        coursesList.innerHTML = `<li class="text-red-600">Failed to load courses: ${err.message}</li>`;
+      }
+    }
+
+    signOutBtn.addEventListener('click', () => {
+      auth.signOut().then(() => (window.location.href = 'signin.html'));
+    });
+  </script>
+</body>
+</html>
