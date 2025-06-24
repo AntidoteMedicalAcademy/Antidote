@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dashboard - Antidote Medical Academy</title>
 
-  <!-- Firebase SDK (Compat version) -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -29,7 +29,9 @@
   <!-- Main Content -->
   <main class="max-w-4xl mx-auto px-4 py-10 space-y-10 flex-grow w-full">
     <section>
-      <h1 class="text-3xl font-bold mb-4 text-gray-800">Welcome, <span id="user-email">User</span> 👋</h1>
+      <h1 class="text-3xl font-bold mb-4 text-gray-800">
+        Welcome, <span id="userName">Loading...</span> 👋
+      </h1>
       <p class="text-gray-600 max-w-lg">Your enrolled courses are listed below. Tap on any course to start learning.</p>
     </section>
 
@@ -61,42 +63,54 @@
       projectId: "antidote-5c36d",
       storageBucket: "antidote-5c36d.appspot.com",
       messagingSenderId: "643376487279",
-      appId: "1:643376487279:web:9ac6ab3bc4e0711b8da69a",
-      measurementId: "G-N9MEQYS35D"
+      appId: "1:643376487279:web:9ac6ab3bc4e0711b8da69a"
     };
 
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    const userEmailSpan = document.getElementById('user-email');
+    const userNameSpan = document.getElementById('userName');
     const coursesList = document.getElementById('coursesList');
     const signOutBtn = document.getElementById('signOutBtn');
 
     let currentUser = null;
 
-    // Handle Auth State
     auth.onAuthStateChanged(async (user) => {
       if (!user) {
         window.location.href = "signin.html";
         return;
       }
+
       currentUser = user;
-      userEmailSpan.textContent = user.email;
-      loadCourses();
+
+      try {
+        const userDoc = await db.collection('users').doc(user.uid).get();
+        const userData = userDoc.data();
+
+        if (userDoc.exists && userData.fullName) {
+          userNameSpan.textContent = `Dr. ${userData.fullName}`;
+        } else {
+          userNameSpan.textContent = user.email;
+        }
+
+        loadCourses();
+
+      } catch (err) {
+        console.error("Error fetching user:", err);
+        userNameSpan.textContent = user.email;
+      }
     });
 
-    // Load Courses from Firestore
     async function loadCourses() {
       coursesList.innerHTML = '';
       try {
-        const coursesRef = db
+        const snapshot = await db
           .collection("users")
           .doc(currentUser.uid)
           .collection("courses")
-          .orderBy("enrolledAt", "desc");
-
-        const snapshot = await coursesRef.get();
+          .orderBy("enrolledAt", "desc")
+          .get();
 
         if (snapshot.empty) {
           coursesList.innerHTML = '<li class="text-gray-500 italic">You have not enrolled in any courses yet.</li>';
@@ -117,13 +131,11 @@
       }
     }
 
-    // Sign Out
     signOutBtn.addEventListener('click', () => {
       auth.signOut().then(() => {
         window.location.href = "signin.html";
       });
     });
   </script>
-
 </body>
 </html>
